@@ -32,11 +32,19 @@ module Onesky
       end
 
       def to_onesky_locale(locale)
-        locale.gsub('_', '-')
+        if ((@config.has_key?'locale_mapping') && (@config['locale_mapping'].has_key? locale))
+          @config['locale_mapping'][locale]
+        else
+          locale.gsub('_', '-')
+        end
       end
 
       def to_rails_locale(locale)
-        locale.gsub('-', '_')
+        if ((@config.has_key?'locale_mapping') && (@config['locale_mapping'].has_value? locale))
+          @config['locale_mapping'].key(locale)
+        else
+          locale.gsub('-', '_')
+        end
       end
 
       private

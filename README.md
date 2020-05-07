@@ -26,6 +26,17 @@ rails generate onesky:init <api_key> <api_secret> <project_id>
 ```
 Generate config file at `config/onesky.yml`
 
+**Additional configuration**
+In order to keep using custom locale names in your rails application, you can add something like this to your config file at `config/onesky.yml`:
+
+```
+locale_mapping:
+  # rails_locale: onesky-locale
+  es: es-ES
+  ar: es-AR
+  uk: en-GB
+```
+
 **Upload string files**
 ```
 rake onesky:upload
@@ -49,6 +60,7 @@ Download translations of files uploaded only for the base language.
 rake onesky:download_all
 ```
 Download translations of files uploaded for all the languages including the base language.
+
 
 ## TODO
 - Specify file to upload

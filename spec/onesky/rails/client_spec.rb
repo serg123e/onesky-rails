@@ -71,6 +71,26 @@ describe Onesky::Rails::Client do
         expect{client.verify_languages!}.to raise_error(Onesky::Rails::BaseLanguageNotMatchError, 'The default locale (ja) of your Rails app doesn\'t match the base language (en) of the OneSky project')
       end
     end
+    context 'working with mapped locales' do
+      before(:all) do
+        config = create_config_hash
+        config['locale_mapping'] = { 'es' => 'es-ES',
+                                     'ar' => 'es-AR',
+                                     'uk' => 'en-GB' }
+
+        @client = Onesky::Rails::Client.new(config)
+      end
+      it 'converts to rails' do
+        expect( @client.to_rails_locale('es-ES')).to eq 'es'
+      end
+      it 'converts to onesky' do
+        expect( @client.to_onesky_locale('es')).to eq 'es-ES'
+      end
+      it 'keep working as before with not-mapped locales' do
+        expect( @client.to_onesky_locale('ru_RU')).to eq 'ru-RU'
+        expect( @client.to_rails_locale('ru-RU')).to eq 'ru_RU'
+      end
+    end
   end
 
 end

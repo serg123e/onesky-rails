@@ -53,7 +53,7 @@ NOTICE
         locales.each do |locale|
           locale = locale.to_s
           puts "#{locale_dir(locale)}/"
-          onesky_locale = locale.gsub('_', '-')
+          onesky_locale = to_onesky_locale( locale )
           files.each do |file|
             response = @project.export_translation(source_file_name: file, locale: onesky_locale)
             if response.code == 200
