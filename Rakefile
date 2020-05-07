@@ -1,3 +1,11 @@
+task install: :build do
+  sh("gem install onesky-rails-1.4.1.zem.gem")
+end
+
+task build: :spec do
+  sh("gem build onesky-rails.gemspec")
+end
+
 begin
   require 'rspec/core/rake_task'
 

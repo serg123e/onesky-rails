@@ -6,17 +6,17 @@ Integrate Rails app with [OneSky](http://www.oneskyapp.com) that provide `upload
 
 ## Installation
 
+Install a gem:
+
+    $ gem install ./onesky-rails-1.4.1.zem.gem
+
 Add this line to your application's Gemfile:
 
-    gem 'onesky-rails'
+    gem 'onesky-rails', '1.4.1.zem'
 
 And then execute:
 
     $ bundle
-
-Or install it yourself as:
-
-    $ gem install onesky-rails
 
 ## Usage
 
