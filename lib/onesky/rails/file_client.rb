@@ -102,7 +102,7 @@ NOTICE
         target_file = locale_file_name(file, locale)
 
         File.open(File.join(locale_path, target_file), 'w') do |f|
-          f.write(TRANSLATION_NOTICE + response.body.force_encoding(ENCODING))
+          f.write(TRANSLATION_NOTICE + to_rails_locale_yml(locale,response.body.force_encoding(ENCODING)))
         end
         target_file
       end

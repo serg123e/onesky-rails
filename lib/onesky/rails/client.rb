@@ -39,6 +39,10 @@ module Onesky
         end
       end
 
+      def to_rails_locale_yml(locale, yml)
+        yml.sub("#{to_onesky_locale(locale)}:", "#{locale}:")
+      end
+
       def to_rails_locale(locale)
         if ((@config.has_key?'locale_mapping') && (@config['locale_mapping'].has_value? locale))
           @config['locale_mapping'].key(locale)
