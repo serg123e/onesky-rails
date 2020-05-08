@@ -126,7 +126,7 @@ NOTICE
         string_path = Pathname.new(string_path)
         locale_files_filter = generate_locale_files_filter
 
-        paths = Dir.glob("#{string_path}/**/*.yml") | ::I18n.load_path.select{ |p| p=~ /#{string_path}.*\.yml/i } 
+        paths = Dir.glob("#{string_path}/**/*.yml") # | ::I18n.load_path.select{ |p| p=~ /#{string_path}.*\.yml/i }
         paths.map do |path| # 
           relative_path = Pathname.new(path).relative_path_from(string_path).to_s
           next if locale_files_filter && !locale_files_filter.call(relative_path)
