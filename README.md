@@ -61,6 +61,33 @@ rake onesky:download_all
 ```
 Download translations of files uploaded for all the languages including the base language.
 
+**Upload all languages translations**
+```
+rake onesky:upload_all
+```
+Upload all .yml files in config/locales and subdirectories.
+
+You can filter specific files for upload in config file at `config/onesky.yml`:
+
+```
+upload:
+  is_keeping_all_strings: true
+  only:
+    - testdir/ar.yml
+    - es.yml
+
+```
+
+or just exclude some of them
+```
+upload:
+  is_keeping_all_strings: true
+  except:
+    - devise.ec.yml
+    - devise.de.yml
+
+```
+
 
 ## TODO
 - Specify file to upload
