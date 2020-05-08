@@ -16,15 +16,51 @@ module Onesky
 # If you still want to modify this file directly, please upload this file to OneSky platform after modification in order to update the translation at OneSky
 
 NOTICE
+      def locale_to_onesky_tmpfile( path, dir )
+        filename = File.basename(path)
+        content_hash = YAML.load_file(path)
+        updated = false
+        content_hash.keys.each do |rails_locale|
+          onesky_locale = to_onesky_locale(rails_locale)
+          if !(onesky_locale.eql? rails_locale)
+            updated = true 
+            content_hash[ onesky_locale ] = content_hash.delete( rails_locale )
+            puts("replacing #{rails_locale} to #{onesky_locale} for #{filename}")
+          end    
+        end
+        if (updated)
 
-      def upload(string_path)
+          tmpfile = File.join(dir, filename)
+          File.open( tmpfile, 'w:utf-8' ) do |f|
+            f.write( content_hash.to_yaml )
+          end
+          tmpfile
+        else
+          path
+        end
+      end
+
+      def get_locale_from_file(path)
+        content_hash = YAML.load_file(path)
+        if (content_hash.keys.length > 1)
+           raise ArgumentError.new("this version supports ony 1 language per YAML file")
+        else
+           content_hash.keys.first
+        end
+      end
+
+      def upload(string_path, options = {})
         verify_languages!
 
-        get_default_locale_files(string_path).map do |path|
-          filename = File.basename(path)
-          puts "Uploading #{filename}"
-          @project.upload_file(file: path, file_format: FILE_FORMAT, is_keeping_all_strings: is_keep_strings?)
-          path
+        get_locale_files(string_path, options[:all]).map do |path|
+          Dir.mktmpdir('onesky') do |dir|
+            tmpfile = locale_to_onesky_tmpfile( path, dir )
+            onesky_locale = to_onesky_locale( get_locale_from_file( tmpfile ) )
+            filename = File.basename(path)
+            puts "Uploading #{filename} (#{onesky_locale})"
+            @project.upload_file(file: tmpfile, file_format: FILE_FORMAT, is_keeping_all_strings: is_keep_strings?, locale: onesky_locale)
+            tmpfile
+          end
         end
       end
 
@@ -86,15 +122,25 @@ NOTICE
         end
       end
 
-      def get_default_locale_files(string_path)
+      def get_locale_files(string_path, all=false, specific_locale=false)
         string_path = Pathname.new(string_path)
         locale_files_filter = generate_locale_files_filter
-        Dir.glob("#{string_path}/**/*.yml").map do |path|
+
+        paths = Dir.glob("#{string_path}/**/*.yml") | ::I18n.load_path.select{ |p| p=~ /#{string_path}.*\.yml/i } 
+        paths.map do |path| # 
           relative_path = Pathname.new(path).relative_path_from(string_path).to_s
           next if locale_files_filter && !locale_files_filter.call(relative_path)
           content_hash = YAML.load_file(path)
-          path if content_hash && content_hash.has_key?(@base_locale.to_s)
+          path if content_hash && ( all || (specific_locale && content_hash.has_key?(specific_locale)) || content_hash.has_key?(@base_locale.to_s) )
         end.compact
+      end
+
+      def get_all_locale_files(string_path)
+        get_locale_files(string_path, true)
+      end
+
+      def get_default_locale_files(string_path)
+        get_locale_files(string_path, false)
       end
 
       def save_translation(response, string_path, locale, file)

@@ -76,7 +76,8 @@ describe Onesky::Rails::Client do
         config = create_config_hash
         config['locale_mapping'] = { 'es' => 'es-ES',
                                      'ar' => 'es-AR',
-                                     'uk' => 'en-GB' }
+                                     'uk' => 'en-GB',
+                                     'en' => 'en-AU' }
 
         @client = Onesky::Rails::Client.new(config)
       end

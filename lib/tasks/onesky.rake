@@ -6,6 +6,11 @@ namespace :onesky do
     puts 'Done!'
   end
 
+  task :upload_all => :environment do
+    file_client.upload(locale_path, all: true)
+    puts 'Done!'
+  end
+
   desc 'Download translations from OneSky platform.'
   task :download => :environment do
     file_client.download(locale_path)

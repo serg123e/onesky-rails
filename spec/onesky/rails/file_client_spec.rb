@@ -162,4 +162,26 @@ describe Onesky::Rails::FileClient do
 
   end
 
+
+    context 'working with mapped locales' do
+      before(:all) do
+        config = create_config_hash
+        config['locale_mapping'] = { 'es' => 'es-ES',
+                                     'ar' => 'es-AR',
+                                     'uk' => 'en-GB',
+                                     'en' => 'en-AU' }
+
+        @client = Onesky::Rails::FileClient.new(config)
+      end
+      it 'creates temp file with mapped locale' do
+        path = 'spec/fixtures/sample_files/en/en.yml'
+        Dir.mktmpdir('onesky') do |dir|
+          tmpfile = @client.locale_to_onesky_tmpfile( path, dir )
+          expect( File.read(tmpfile) ).to match(/^en-AU:/)
+        end
+      end
+
+    end
+
+
 end
