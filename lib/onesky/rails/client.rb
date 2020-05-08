@@ -40,7 +40,7 @@ module Onesky
       end
 
       def to_rails_locale_yml(locale, yml)
-        yml.sub("#{to_onesky_locale(locale)}:", "#{locale}:")
+        yml.sub(/^#{to_onesky_locale(locale)}:/, "#{locale}:")
       end
 
       def to_rails_locale(locale)
