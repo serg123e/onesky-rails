@@ -43,7 +43,7 @@ NOTICE
       def get_locale_from_file(path)
         content_hash = YAML.load_file(path)
         if (content_hash.keys.length > 1)
-           raise ArgumentError.new("this version supports ony 1 language per YAML file")
+           raise ArgumentError.new("#{path}: this version supports only 1 language per YAML file")
         else
            content_hash.keys.first
         end
