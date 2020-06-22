@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "onesky-ruby", "~> 1.1.0"
 
   spec.add_development_dependency "bundler", "~> 1.16"
-  spec.add_development_dependency "rake", "~> 12.3"
+  spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.7.0"
   spec.add_development_dependency "timecop", "~> 0.9.0"
   spec.add_development_dependency "webmock", "~> 3.0.0"
